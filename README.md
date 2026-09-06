@@ -1,226 +1,660 @@
-# 🧠 GPT from Scratch
+# Optimizing Self and Multi-Head Attention Architecture of Transformer Using CUDA
 
-A character-level GPT language model built entirely from scratch in PyTorch, trained on the [Tiny Shakespeare](https://raw.githubusercontent.com/karpathy/ng-video-lecture/master/input.txt) dataset. This project follows **Andrej Karpathy's** legendary YouTube lecture — [**"Let's build GPT: from scratch, in code, spelled out"**](https://www.youtube.com/watch?v=kCc8FmEb1nY) — and implements every component of a decoder-only Transformer, step by step.
+## Project Overview
 
----
+This project focuses on implementing and optimizing the **self-attention architecture used in Transformers** using **CUDA C++**.
 
-## 📚 Acknowledgements
+The project is based on the mathematical operations behind the attention mechanism of a GPT/Transformer model. Instead of relying entirely on high-level PyTorch operations, the core attention computations are implemented manually using:
 
-This project is heavily inspired by and built while following along with:
+* C++
+* CUDA C++
+* Custom CUDA kernels
+* GPU parallelism
+* Shared memory optimization
+* Tiled matrix multiplication
 
-- 🎬 **[Andrej Karpathy — "Let's build GPT: from scratch, in code, spelled out"](https://www.youtube.com/watch?v=kCc8FmEb1nY)** — the primary reference for the entire implementation.
-- 📄 **["Attention Is All You Need"](https://arxiv.org/abs/1706.03762)** (Vaswani et al., 2017) — the original Transformer paper.
-- 🔗 **[nanoGPT](https://github.com/karpathy/nanoGPT)** — Karpathy's minimal GPT training repository.
+The project demonstrates the progression from a sequential CPU implementation to a naive CUDA implementation and finally to an optimized CUDA implementation.
 
-All credit for the teaching methodology and the incremental build-up approach goes to Andrej Karpathy. This repo is my personal learning implementation.
+The mathematical attention operation is:
 
----
-
-## 🏗️ Project Structure
-
-```
-GPT from Scratch/
-├── bigram.py          # V1 — Simple bigram language model (baseline)
-├── v2.py              # V2 — Full GPT with multi-head self-attention & transformer blocks
-├── gpt_dev.ipynb      # Development notebook (step-by-step exploration & experimentation)
-├── demo.py            # Quick script to verify CUDA / GPU availability
-├── input.txt          # Training data — Tiny Shakespeare (~1.1 MB)
-├── requirements.txt   # Python dependencies (PyTorch + CUDA 12.1)
-└── .venv/             # Virtual environment (managed with uv)
-```
+$$
+Attention(Q,K,V) =
+Softmax
+\left(
+\frac{QK^T}{\sqrt{d_k}}
++
+Mask
+\right)V
+$$
 
 ---
 
-## 🔬 What's Implemented
+# Project Objectives
 
-### V1 — Bigram Language Model (`bigram.py`)
+The main objectives of this project are:
 
-The simplest possible language model used as a starting baseline:
-
-- Character-level tokenization (encode / decode)
-- Single embedding lookup table
-- Cross-entropy loss
-- Autoregressive generation via multinomial sampling
-
-| Hyperparameter | Value |
-|---|---|
-| Batch Size | 32 |
-| Block Size (Context Length) | 8 |
-| Max Iterations | 3,000 |
-| Learning Rate | 1e-2 |
-
-### V2 — Full GPT Transformer (`v2.py`)
-
-The complete decoder-only Transformer architecture:
-
-- **Token + Positional Embeddings**
-- **Multi-Head Self-Attention** — scaled dot-product attention with causal masking
-- **Feed-Forward Network** — two-layer MLP with ReLU activation (4× expansion)
-- **Transformer Blocks** — with residual connections and pre-norm LayerNorm
-- **Dropout** — applied throughout for regularization
-- **Autoregressive Generation** — context-windowed sampling
-
-| Hyperparameter | Value |
-|---|---|
-| Batch Size | 64 |
-| Block Size (Context Length) | 256 |
-| Embedding Dimension (`n_embd`) | 384 |
-| Number of Heads (`n_head`) | 6 |
-| Number of Layers (`n_layer`) | 6 |
-| Dropout | 0.2 |
-| Max Iterations | 5,000 |
-| Learning Rate | 3e-4 |
-| **Total Parameters** | **~10.8M** |
+1. Understand the mathematical implementation of Transformer self-attention.
+2. Implement self-attention from scratch using C++.
+3. Parallelize attention computation using CUDA.
+4. Optimize the `Q × Kᵀ` operation using shared memory and tiled computation.
+5. Compare CPU, naive CUDA, and optimized CUDA implementations.
+6. Analyze how CUDA performance changes with increasing sequence length.
+7. Extend the implementation toward optimized multi-head attention during the remaining project period.
 
 ---
 
-## 🛠️ Setup & Installation
+# Current Implementation Status
 
-This project uses [**uv**](https://docs.astral.sh/uv/) as the Python package manager for fast, reliable dependency management.
+## Completed
 
-### Prerequisites
+### Phase 1: CPU Self-Attention
 
-- Python 3.10+
-- [uv](https://docs.astral.sh/uv/) installed (`pip install uv` or see [installation docs](https://docs.astral.sh/uv/getting-started/installation/))
-- NVIDIA GPU with CUDA support (recommended; CPU fallback is available)
+A sequential CPU implementation of self-attention was created using standard C++.
 
-### 1. Clone the repository
+The implementation performs:
 
-```bash
-git clone https://github.com/<your-username>/gpt-from-scratch.git
-cd gpt-from-scratch
+```text
+Q × Kᵀ
+   ↓
+Scaling by √dₖ
+   ↓
+Causal Mask
+   ↓
+Row-wise Softmax
+   ↓
+Attention × V
 ```
 
-### 2. Create the virtual environment with uv
+File:
 
-```bash
-uv venv
-```
-
-### 3. Activate the virtual environment
-
-```bash
-# Windows (PowerShell)
-.venv\Scripts\Activate.ps1
-
-# Windows (CMD)
-.venv\Scripts\activate.bat
-
-# Linux / macOS
-source .venv/bin/activate
-```
-
-### 4. Install dependencies with uv
-
-```bash
-uv pip install -r requirements.txt
-```
-
-This installs PyTorch with **CUDA 12.1** support along with torchvision, torchaudio, and altair.
-
-### 5. Verify GPU availability
-
-```bash
-python demo.py
-```
-
-You should see output like:
-
-```
-True
-12.1
-NVIDIA GeForce RTX XXXX
+```text
+cuda_attention/01_cpu_attention.cpp
 ```
 
 ---
 
-## 🚀 Usage
+### Phase 2: Naive CUDA Self-Attention
 
-### Download the training data
+The attention computation was moved to the GPU using CUDA kernels.
 
-The Tiny Shakespeare dataset should already be included as `input.txt`. If not:
+The basic thread mapping is:
 
-```bash
-# Using wget
-wget https://raw.githubusercontent.com/karpathy/ng-video-lecture/master/input.txt
-
-# Or using curl
-curl -O https://raw.githubusercontent.com/karpathy/ng-video-lecture/master/input.txt
+```text
+Thread(row, col)
+        ↓
+Computes Attention Score[row][col]
 ```
 
-### Train the bigram model (V1 — baseline)
+The CUDA implementation includes:
 
-```bash
-python bigram.py
+* GPU memory allocation
+* Host to Device memory transfer
+* CUDA kernel execution
+* Parallel attention score computation
+* Causal masking
+* Row-wise softmax
+* Attention × V computation
+* Device to Host memory transfer
+
+File:
+
+```text
+cuda_attention/02_naive_cuda_attention.cu
 ```
-
-### Train the full GPT model (V2)
-
-```bash
-python v2.py
-```
-
-> ⚠️ Training the V2 model requires a CUDA-capable GPU for reasonable training times. On CPU, expect it to be significantly slower.
-
-### Explore in the notebook
-
-```bash
-jupyter notebook gpt_dev.ipynb
-```
-
-The development notebook walks through the implementation incrementally — from raw text processing to the full Transformer — making it great for learning and experimentation.
 
 ---
 
-## 📊 Training Data
+### Phase 3: Optimized CUDA Attention
 
-The model is trained on the **Tiny Shakespeare** dataset (~1.1 MB, ~1M characters), which is a concatenation of all of Shakespeare's works. The character-level vocabulary consists of 65 unique characters.
+The optimized implementation improves the attention score computation using:
 
-- **Train split**: 90% of the data
-- **Validation split**: 10% of the data
+* Shared memory
+* Tiled matrix multiplication
+* 2D CUDA thread blocks
+* Reduced global memory access
+* CUDA event timing
 
----
+Instead of repeatedly loading data from global memory, blocks of `Q` and `K` are loaded into shared memory.
 
-## 🧩 Key Concepts Covered
-
-Following along with Karpathy's lecture, this project covers:
-
-1. **Character-level tokenization** — mapping characters to integers and back
-2. **Bigram language models** — the simplest autoregressive model
-3. **Self-attention mechanism** — the core of Transformers
-4. **Scaled dot-product attention** — with `C^(-0.5)` scaling
-5. **Causal masking** — lower-triangular mask to prevent attending to future tokens
-6. **Multi-head attention** — running multiple attention heads in parallel
-7. **Feed-forward networks** — position-wise MLPs within Transformer blocks
-8. **Residual connections** — enabling deep network training
-9. **Layer normalization** — pre-norm formulation for training stability
-10. **Positional embeddings** — encoding sequence position information
-11. **Dropout regularization** — preventing overfitting
-12. **AdamW optimizer** — weight-decay-decoupled Adam
-
----
-
-## 📝 Requirements
-
-```
-torch
-torchvision
-torchaudio
-altair
+```text
+Global Memory
+      │
+      ▼
+┌──────────────────┐
+│  Shared Memory   │
+│                  │
+│  Q Tile          │
+│  K Tile          │
+└──────────────────┘
+      │
+      ▼
+Multiple CUDA Threads
 ```
 
-All PyTorch packages are installed from the **CUDA 12.1** wheel index (`https://download.pytorch.org/whl/cu121`).
+File:
+
+```text
+cuda_attention/03_optimized_attention.cu
+```
 
 ---
 
-## 📜 License
+### Phase 4: Performance Benchmarking
 
-This project is for educational purposes. Feel free to use, modify, and learn from it.
+The project benchmarks:
+
+```text
+CPU Sequential
+        ↓
+Naive CUDA
+        ↓
+Optimized CUDA
+```
+
+The benchmark tests multiple sequence lengths:
+
+```text
+128
+256
+512
+1024
+```
+
+with:
+
+```text
+Head Dimension = 64
+Tile Size = 16 × 16
+```
+
+File:
+
+```text
+cuda_attention/benchmark.cu
+```
 
 ---
 
-## 🙏 Special Thanks
+# Project Structure
 
-A huge thank you to **[Andrej Karpathy](https://karpathy.ai/)** for creating one of the best educational resources on Transformers and GPT. His ability to break down complex concepts into intuitive, code-first explanations is truly unmatched. If you haven't watched the video yet, I highly recommend it — it's a masterclass in deep learning education.
+```text
+GPT-from-scratch/
+│
+├── bigram.py
+├── demo.py
+├── gpt_dev.ipynb
+├── input.txt
+├── requirements.txt
+├── v2.py
+│
+├── cuda_attention/
+│   │
+│   ├── 01_cpu_attention.cpp
+│   │   └── Sequential CPU implementation
+│   │
+│   ├── 02_naive_cuda_attention.cu
+│   │   └── Basic CUDA implementation
+│   │
+│   ├── 03_optimized_attention.cu
+│   │   └── Shared memory optimized attention
+│   │
+│   ├── benchmark.cu
+│   │   └── CPU vs CUDA performance benchmark
+│   │
+│   └── CMakeLists.txt
+│
+└── README.md
+```
 
-> *"The spelled out intro to language modeling: building makeGPT"* — Andrej Karpathy
+---
+
+# System Requirements
+
+The project was developed and tested using:
+
+```text
+Operating System: Windows 11
+GPU: NVIDIA GeForce RTX 4060
+CUDA Toolkit: CUDA 13.3
+CUDA Compiler: nvcc 13.3
+C++ Compiler: Microsoft Visual C++ 2022
+Architecture: x64
+```
+
+An NVIDIA GPU with CUDA support is required.
+
+---
+
+# Installation and Setup
+
+## 1. Install CUDA Toolkit
+
+Install the NVIDIA CUDA Toolkit.
+
+Verify the installation:
+
+```cmd
+nvcc --version
+```
+
+Expected output should show the installed CUDA version.
+
+Example:
+
+```text
+Cuda compilation tools, release 13.3
+```
+
+---
+
+## 2. Install Visual Studio Community
+
+Install Visual Studio Community 2022 with:
+
+```text
+Desktop development with C++
+```
+
+Make sure the following components are installed:
+
+```text
+MSVC C++ x64/x86 Build Tools
+Windows SDK
+```
+
+---
+
+## 3. Open the Visual Studio Developer Environment
+
+Open Command Prompt and initialize the Visual Studio x64 compiler environment:
+
+```cmd
+call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -arch=x64 -host_arch=x64
+```
+
+Verify the compiler:
+
+```cmd
+cl
+```
+
+The output should contain:
+
+```text
+for x64
+```
+
+Verify CUDA:
+
+```cmd
+nvcc --version
+```
+
+---
+
+# Running the Project
+
+Navigate to the CUDA implementation directory:
+
+```cmd
+cd "D:\College\SEM7\GPU\pROJECT\GPT from Scratch\cuda_attention"
+```
+
+> Replace the path with the location where the repository exists on your system.
+
+---
+
+# 1. Run CPU Self-Attention
+
+Compile:
+
+```cmd
+cl /EHsc /O2 01_cpu_attention.cpp /Fe:cpu_attention.exe
+```
+
+Run:
+
+```cmd
+cpu_attention.exe
+```
+
+This executes the complete self-attention calculation sequentially on the CPU.
+
+---
+
+# 2. Run Naive CUDA Attention
+
+Compile:
+
+```cmd
+nvcc -O3 -arch=sm_89 02_naive_cuda_attention.cu -o naive_attention.exe
+```
+
+Run:
+
+```cmd
+naive_attention.exe
+```
+
+This executes the attention calculation using CUDA kernels.
+
+---
+
+# 3. Run Optimized CUDA Attention
+
+Compile:
+
+```cmd
+nvcc -O3 -arch=sm_89 03_optimized_attention.cu -o optimized_attention.exe
+```
+
+Run:
+
+```cmd
+optimized_attention.exe
+```
+
+The implementation uses shared memory and tiled matrix multiplication.
+
+---
+
+# 4. Run Benchmark
+
+Compile:
+
+```cmd
+nvcc -O3 -arch=sm_89 benchmark.cu -o benchmark.exe
+```
+
+Run:
+
+```cmd
+benchmark.exe
+```
+
+The benchmark compares:
+
+```text
+CPU Sequential
+Naive CUDA
+Optimized CUDA
+```
+
+---
+
+# Benchmark Results
+
+The current implementation was tested with the following configuration:
+
+```text
+GPU: NVIDIA GeForce RTX 4060
+Head Dimension: 64
+CUDA Iterations: 20
+```
+
+| Sequence Length | CPU (ms) | Naive CUDA (ms) | Optimized CUDA (ms) | Speedup |
+| --------------: | -------: | --------------: | ------------------: | ------: |
+|             128 |   0.3259 |          0.0556 |              0.0517 |   6.30× |
+|             256 |   1.5480 |          0.0671 |              0.0481 |  32.16× |
+|             512 |   7.0986 |          0.1849 |              0.1315 |  53.97× |
+|            1024 |  30.7340 |          0.6447 |              0.4365 |  70.41× |
+
+The speedup is calculated as:
+
+$$
+Speedup =
+\frac{CPU\ Execution\ Time}
+{Optimized\ CUDA\ Execution\ Time}
+$$
+
+The highest measured speedup in the current benchmark is:
+
+```text
+70.41×
+```
+
+for sequence length:
+
+```text
+1024
+```
+
+---
+
+# Performance Analysis
+
+The results show that CUDA acceleration becomes more beneficial as sequence length increases.
+
+```text
+Sequence Length     Speedup
+────────────────────────────
+128                 6.30×
+256                 32.16×
+512                 53.97×
+1024                70.41×
+```
+
+Self-attention has approximately quadratic complexity with respect to sequence length:
+
+$$
+O(n^2 \cdot d)
+$$
+
+As the sequence length increases, the number of attention scores increases significantly.
+
+CUDA allows many of these calculations to execute in parallel.
+
+The optimized implementation further improves performance through:
+
+```text
+Shared Memory
+      +
+Tiled Computation
+      +
+Parallel Thread Execution
+```
+
+---
+
+# CUDA Optimization Strategy
+
+## Naive CUDA
+
+Each thread directly accesses global memory.
+
+```text
+Thread
+  │
+  ├── Read Q from Global Memory
+  ├── Read K from Global Memory
+  └── Calculate one attention score
+```
+
+This causes repeated global memory accesses.
+
+---
+
+## Optimized CUDA
+
+The optimized implementation uses shared memory.
+
+```text
+Global Memory
+       │
+       ▼
+ Load Q and K Tiles
+       │
+       ▼
+ Shared Memory
+       │
+       ▼
+ Multiple Threads Reuse Data
+       │
+       ▼
+ Attention Scores
+```
+
+This reduces repeated global memory accesses and improves memory locality.
+
+---
+
+# Current Limitations
+
+The current project focuses primarily on optimizing the `Q × Kᵀ` computation.
+
+The following operations are currently functional but not fully optimized:
+
+```text
+Row-wise Softmax
+Attention × V
+```
+
+The current softmax implementation uses one active thread per attention row.
+
+This creates an opportunity for further CUDA optimization.
+
+---
+
+# Future Work
+
+The project is planned to continue during the remaining half-semester.
+
+## Phase 5: Parallel Softmax
+
+Implement:
+
+* Parallel maximum reduction
+* Parallel exponential calculation
+* Parallel sum reduction
+* Shared-memory reduction
+
+Current:
+
+```text
+One Row
+   ↓
+One Active Thread
+```
+
+Planned:
+
+```text
+One Row
+   ↓
+One CUDA Block
+   ↓
+Multiple Threads
+   ↓
+Parallel Reduction
+```
+
+---
+
+## Phase 6: Optimize Attention × V
+
+Implement tiled shared-memory multiplication for:
+
+$$
+Softmax(QK^T)V
+$$
+
+This will optimize the second major matrix multiplication in the attention mechanism.
+
+---
+
+## Phase 7: Multi-Head Attention
+
+Extend the current single-head attention implementation to multi-head attention.
+
+```text
+Input
+  │
+  ├── Head 0
+  ├── Head 1
+  ├── Head 2
+  └── Head 3
+        │
+        ▼
+Parallel CUDA Execution
+        │
+        ▼
+Concatenation
+```
+
+Different attention heads can be processed independently on the GPU.
+
+---
+
+## Phase 8: Kernel Fusion
+
+Investigate combining compatible operations to reduce:
+
+```text
+Kernel Launch Overhead
++
+Intermediate Global Memory Access
+```
+
+---
+
+## Phase 9: GPT Integration
+
+Integrate the custom CUDA attention implementation with the existing GPT-from-scratch architecture.
+
+The original repository provides the Transformer/GPT context, while this project replaces the core attention computation with custom CUDA kernels.
+
+---
+
+## Phase 10: GPU Profiling
+
+Future profiling will include:
+
+* CUDA profiling tools
+* Kernel execution analysis
+* Memory access analysis
+* Occupancy analysis
+* Bottleneck identification
+
+---
+
+# Project Progress
+
+```text
+PHASE 1  CPU Self-Attention              ██████████  COMPLETED
+PHASE 2  Naive CUDA Implementation       ██████████  COMPLETED
+PHASE 3  Shared Memory Optimization      ██████████  COMPLETED
+PHASE 4  Performance Benchmarking        ██████████  COMPLETED
+
+PHASE 5  Parallel Softmax                ░░░░░░░░░░  PLANNED
+PHASE 6  Optimized Attention × V         ░░░░░░░░░░  PLANNED
+PHASE 7  Multi-Head Attention            ░░░░░░░░░░  PLANNED
+PHASE 8  Kernel Fusion                   ░░░░░░░░░░  PLANNED
+PHASE 9  GPT Integration                 ░░░░░░░░░░  PLANNED
+PHASE 10 GPU Profiling                   ░░░░░░░░░░  PLANNED
+```
+
+---
+
+# Conclusion
+
+This project demonstrates the implementation and optimization of Transformer self-attention using CUDA.
+
+Starting from a sequential CPU implementation, the attention mechanism was progressively transformed into:
+
+```text
+CPU Sequential Implementation
+              ↓
+Naive CUDA Parallelization
+              ↓
+Shared Memory Optimized CUDA
+              ↓
+Performance Benchmarking
+```
+
+The current implementation achieved up to:
+
+# 70.41× Speedup
+
+over the CPU baseline for the tested configuration.
+
+The project will continue by optimizing the remaining attention operations and extending the implementation to multi-head attention and the full GPT architecture.
