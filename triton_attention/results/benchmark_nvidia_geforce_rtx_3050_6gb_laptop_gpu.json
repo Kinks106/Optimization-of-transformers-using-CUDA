@@ -1,0 +1,1461 @@
+{
+ "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU",
+ "torch": "2.14.1+cu130",
+ "triton": "3.8.0",
+ "args": {
+  "seq_lens": [
+   128,
+   256,
+   512,
+   1024
+  ],
+  "head_dim": 64,
+  "warmup": 10,
+  "iters": 100,
+  "rounds": 5,
+  "seed": 0,
+  "skip_cuda": false,
+  "no_graph": false,
+  "verbose_build": false
+ },
+ "results": [
+  {
+   "seq_len": 128,
+   "version": "naive CUDA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.03689280033111572,
+   "min_ms": 0.03629728078842163,
+   "max_ms": 0.03808383941650391,
+   "rounds_ms": [
+    0.03689280033111572,
+    0.037939200401306154,
+    0.036606719493865965,
+    0.03629728078842163,
+    0.03808383941650391
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "optimized CUDA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.033259520530700686,
+   "min_ms": 0.03243007898330688,
+   "max_ms": 0.03437567949295044,
+   "rounds_ms": [
+    0.033310720920562746,
+    0.03437567949295044,
+    0.03243007898330688,
+    0.032778239250183104,
+    0.033259520530700686
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "Triton tiled",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.05868639945983887,
+   "min_ms": 0.055012478828430175,
+   "max_ms": 0.07690239906311035,
+   "rounds_ms": [
+    0.06825984001159668,
+    0.07690239906311035,
+    0.05835775852203369,
+    0.055012478828430175,
+    0.05868639945983887
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "Triton fused",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.04048895835876465,
+   "min_ms": 0.03236959934234619,
+   "max_ms": 0.05960703849792481,
+   "rounds_ms": [
+    0.05960703849792481,
+    0.050391678810119626,
+    0.03236959934234619,
+    0.04048895835876465,
+    0.032654399871826174
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "PyTorch SDPA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.03323103904724121,
+   "min_ms": 0.030750720500946044,
+   "max_ms": 0.03398655891418457,
+   "rounds_ms": [
+    0.03323103904724121,
+    0.03398655891418457,
+    0.03089344024658203,
+    0.030750720500946044,
+    0.03353728055953979
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "Triton fused FP16",
+   "group": "fp16",
+   "mode": "eager",
+   "median_ms": 0.043888640403747556,
+   "min_ms": 0.037920639514923096,
+   "max_ms": 0.05329984188079834,
+   "rounds_ms": [
+    0.043888640403747556,
+    0.037920639514923096,
+    0.05329984188079834,
+    0.05104640007019043,
+    0.043570880889892576
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "PyTorch SDPA FP16",
+   "group": "fp16",
+   "mode": "eager",
+   "median_ms": 0.04856031894683838,
+   "min_ms": 0.037118399143218996,
+   "max_ms": 0.05248095989227295,
+   "rounds_ms": [
+    0.04856031894683838,
+    0.038850560188293456,
+    0.037118399143218996,
+    0.04975327968597412,
+    0.05248095989227295
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "naive CUDA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.03396608114242554,
+   "min_ms": 0.033679358959198,
+   "max_ms": 0.03507999897003174,
+   "rounds_ms": [
+    0.03369695901870728,
+    0.03507999897003174,
+    0.033679358959198,
+    0.03396608114242554,
+    0.03469311952590942
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "optimized CUDA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.0238592004776001,
+   "min_ms": 0.02355936050415039,
+   "max_ms": 0.02805759906768799,
+   "rounds_ms": [
+    0.02355936050415039,
+    0.0238592004776001,
+    0.02805759906768799,
+    0.025915839672088624,
+    0.023705599308013917
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "Triton tiled",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.010535999536514282,
+   "min_ms": 0.010383360385894776,
+   "max_ms": 0.01227776050567627,
+   "rounds_ms": [
+    0.010391360521316529,
+    0.010383360385894776,
+    0.01227776050567627,
+    0.011284159421920776,
+    0.010535999536514282
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "Triton fused",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.015575040578842164,
+   "min_ms": 0.01551360011100769,
+   "max_ms": 0.017295360565185547,
+   "rounds_ms": [
+    0.01551360011100769,
+    0.01552448034286499,
+    0.015575040578842164,
+    0.015646079778671263,
+    0.017295360565185547
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "PyTorch SDPA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.0262825608253479,
+   "min_ms": 0.026071040630340575,
+   "max_ms": 0.02743295907974243,
+   "rounds_ms": [
+    0.026511359214782714,
+    0.026079680919647217,
+    0.02743295907974243,
+    0.0262825608253479,
+    0.026071040630340575
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "Triton fused FP16",
+   "group": "fp16",
+   "mode": "graph",
+   "median_ms": 0.0077619200944900515,
+   "min_ms": 0.007443199753761291,
+   "max_ms": 0.008417279720306396,
+   "rounds_ms": [
+    0.007443199753761291,
+    0.008151040077209473,
+    0.008417279720306396,
+    0.007751680016517639,
+    0.0077619200944900515
+   ]
+  },
+  {
+   "seq_len": 128,
+   "version": "PyTorch SDPA FP16",
+   "group": "fp16",
+   "mode": "graph",
+   "median_ms": 0.012031999826431274,
+   "min_ms": 0.011479040384292602,
+   "max_ms": 0.013629440069198608,
+   "rounds_ms": [
+    0.012031999826431274,
+    0.01159168004989624,
+    0.011479040384292602,
+    0.012441600561141969,
+    0.013629440069198608
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "naive CUDA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.08113120079040527,
+   "min_ms": 0.0800870418548584,
+   "max_ms": 0.0814361572265625,
+   "rounds_ms": [
+    0.0800870418548584,
+    0.0803228759765625,
+    0.08114879608154296,
+    0.08113120079040527,
+    0.0814361572265625
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "optimized CUDA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.059113597869873045,
+   "min_ms": 0.057774081230163574,
+   "max_ms": 0.0677785587310791,
+   "rounds_ms": [
+    0.0677785587310791,
+    0.057866239547729494,
+    0.059135999679565426,
+    0.057774081230163574,
+    0.059113597869873045
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "Triton tiled",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.06135744094848633,
+   "min_ms": 0.049767680168151855,
+   "max_ms": 0.08530943870544433,
+   "rounds_ms": [
+    0.06617087841033936,
+    0.049767680168151855,
+    0.08530943870544433,
+    0.05042272090911865,
+    0.06135744094848633
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "Triton fused",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.03193824052810669,
+   "min_ms": 0.03111936092376709,
+   "max_ms": 0.06213632106781006,
+   "rounds_ms": [
+    0.03193824052810669,
+    0.06213632106781006,
+    0.03111936092376709,
+    0.031253440380096434,
+    0.03359008073806763
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "PyTorch SDPA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.05478240013122559,
+   "min_ms": 0.050288000106811524,
+   "max_ms": 0.0621670389175415,
+   "rounds_ms": [
+    0.05104640007019043,
+    0.05692351818084717,
+    0.0621670389175415,
+    0.050288000106811524,
+    0.05478240013122559
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "Triton fused FP16",
+   "group": "fp16",
+   "mode": "eager",
+   "median_ms": 0.03854207992553711,
+   "min_ms": 0.03745856046676636,
+   "max_ms": 0.047852158546447754,
+   "rounds_ms": [
+    0.03805471897125244,
+    0.03745856046676636,
+    0.047852158546447754,
+    0.04279168128967285,
+    0.03854207992553711
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "PyTorch SDPA FP16",
+   "group": "fp16",
+   "mode": "eager",
+   "median_ms": 0.03511296033859253,
+   "min_ms": 0.0326144003868103,
+   "max_ms": 0.05094240188598633,
+   "rounds_ms": [
+    0.03263456106185913,
+    0.05094240188598633,
+    0.03779583930969238,
+    0.03511296033859253,
+    0.0326144003868103
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "naive CUDA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.07803904056549073,
+   "min_ms": 0.07795711994171142,
+   "max_ms": 0.07814144134521485,
+   "rounds_ms": [
+    0.07802879810333252,
+    0.07803904056549073,
+    0.07806975841522217,
+    0.07795711994171142,
+    0.07814144134521485
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "optimized CUDA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.05445631980895996,
+   "min_ms": 0.054186558723449706,
+   "max_ms": 0.05448639869689941,
+   "rounds_ms": [
+    0.054186558723449706,
+    0.05445631980895996,
+    0.05448639869689941,
+    0.05444511890411377,
+    0.05445631980895996
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "Triton tiled",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.02380800008773804,
+   "min_ms": 0.022579200267791748,
+   "max_ms": 0.024655680656433105,
+   "rounds_ms": [
+    0.023775680065155028,
+    0.022579200267791748,
+    0.024655680656433105,
+    0.024432640075683593,
+    0.02380800008773804
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "Triton fused",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.02763551950454712,
+   "min_ms": 0.027410879135131835,
+   "max_ms": 0.02923520088195801,
+   "rounds_ms": [
+    0.0280678391456604,
+    0.02763551950454712,
+    0.02923520088195801,
+    0.02747391939163208,
+    0.027410879135131835
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "PyTorch SDPA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.04708352088928223,
+   "min_ms": 0.04688896179199219,
+   "max_ms": 0.04714240074157715,
+   "rounds_ms": [
+    0.04708352088928223,
+    0.047063040733337405,
+    0.04688896179199219,
+    0.04714240074157715,
+    0.04709375858306885
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "Triton fused FP16",
+   "group": "fp16",
+   "mode": "graph",
+   "median_ms": 0.01687551975250244,
+   "min_ms": 0.010678399801254273,
+   "max_ms": 0.017059839963912964,
+   "rounds_ms": [
+    0.01687551975250244,
+    0.017008639574050903,
+    0.017059839963912964,
+    0.012093440294265748,
+    0.010678399801254273
+   ]
+  },
+  {
+   "seq_len": 256,
+   "version": "PyTorch SDPA FP16",
+   "group": "fp16",
+   "mode": "graph",
+   "median_ms": 0.016721919775009156,
+   "min_ms": 0.01661952018737793,
+   "max_ms": 0.018155519962310792,
+   "rounds_ms": [
+    0.016629760265350343,
+    0.016721919775009156,
+    0.018155519962310792,
+    0.017015039920806885,
+    0.01661952018737793
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "naive CUDA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.25379615783691406,
+   "min_ms": 0.2536652755737305,
+   "max_ms": 0.25405439376831057,
+   "rounds_ms": [
+    0.25379615783691406,
+    0.2539110374450684,
+    0.2536652755737305,
+    0.25405439376831057,
+    0.2537772750854492
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "optimized CUDA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.17965055465698243,
+   "min_ms": 0.17945600509643556,
+   "max_ms": 0.1799577522277832,
+   "rounds_ms": [
+    0.17945600509643556,
+    0.1799577522277832,
+    0.17965055465698243,
+    0.17990528106689452,
+    0.1796499252319336
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "Triton tiled",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.07589632034301758,
+   "min_ms": 0.07445504188537598,
+   "max_ms": 0.07821311950683593,
+   "rounds_ms": [
+    0.07445504188537598,
+    0.07589632034301758,
+    0.07629824161529541,
+    0.07821311950683593,
+    0.07579391956329345
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "Triton fused",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.05416800022125244,
+   "min_ms": 0.0531660795211792,
+   "max_ms": 0.055304641723632815,
+   "rounds_ms": [
+    0.05334015846252441,
+    0.05475327968597412,
+    0.05416800022125244,
+    0.055304641723632815,
+    0.0531660795211792
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "PyTorch SDPA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.0930406379699707,
+   "min_ms": 0.09268256187438965,
+   "max_ms": 0.09326592445373535,
+   "rounds_ms": [
+    0.09326592445373535,
+    0.09268256187438965,
+    0.09312255859375,
+    0.09282560348510742,
+    0.0930406379699707
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "Triton fused FP16",
+   "group": "fp16",
+   "mode": "eager",
+   "median_ms": 0.044750399589538574,
+   "min_ms": 0.03870719909667969,
+   "max_ms": 0.06124224185943603,
+   "rounds_ms": [
+    0.05739520072937012,
+    0.06124224185943603,
+    0.03870719909667969,
+    0.044750399589538574,
+    0.04262847900390625
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "PyTorch SDPA FP16",
+   "group": "fp16",
+   "mode": "eager",
+   "median_ms": 0.05595136165618896,
+   "min_ms": 0.03176352024078369,
+   "max_ms": 0.09082880020141601,
+   "rounds_ms": [
+    0.09082880020141601,
+    0.05595136165618896,
+    0.03176352024078369,
+    0.03615744113922119,
+    0.06400000095367432
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "naive CUDA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.25061376571655275,
+   "min_ms": 0.25046016693115236,
+   "max_ms": 0.2508566474914551,
+   "rounds_ms": [
+    0.25046016693115236,
+    0.25061376571655275,
+    0.25066495895385743,
+    0.2508566474914551,
+    0.25057151794433596
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "optimized CUDA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.1767411231994629,
+   "min_ms": 0.17633119583129883,
+   "max_ms": 0.17736703872680665,
+   "rounds_ms": [
+    0.17633119583129883,
+    0.17656831741333007,
+    0.17736703872680665,
+    0.1767411231994629,
+    0.17674240112304687
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "Triton tiled",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.0717903995513916,
+   "min_ms": 0.07144447803497314,
+   "max_ms": 0.073471999168396,
+   "rounds_ms": [
+    0.07144447803497314,
+    0.07165952205657959,
+    0.0717903995513916,
+    0.07300096035003661,
+    0.073471999168396
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "Triton fused",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.05346303939819336,
+   "min_ms": 0.053196802139282226,
+   "max_ms": 0.05360640048980713,
+   "rounds_ms": [
+    0.053196802139282226,
+    0.05335008144378662,
+    0.05349376201629639,
+    0.05346303939819336,
+    0.05360640048980713
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "PyTorch SDPA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.0895471954345703,
+   "min_ms": 0.08938495635986328,
+   "max_ms": 0.08972288131713867,
+   "rounds_ms": [
+    0.08938495635986328,
+    0.08972288131713867,
+    0.08955904006958008,
+    0.08940544128417968,
+    0.0895471954345703
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "Triton fused FP16",
+   "group": "fp16",
+   "mode": "graph",
+   "median_ms": 0.013824000358581542,
+   "min_ms": 0.01357632040977478,
+   "max_ms": 0.015666879415512085,
+   "rounds_ms": [
+    0.013824000358581542,
+    0.01380352020263672,
+    0.014202879667282104,
+    0.01357632040977478,
+    0.015666879415512085
+   ]
+  },
+  {
+   "seq_len": 512,
+   "version": "PyTorch SDPA FP16",
+   "group": "fp16",
+   "mode": "graph",
+   "median_ms": 0.028825600147247315,
+   "min_ms": 0.02850816011428833,
+   "max_ms": 0.03132416009902954,
+   "rounds_ms": [
+    0.02850816011428833,
+    0.02855936050415039,
+    0.031252479553222655,
+    0.028825600147247315,
+    0.03132416009902954
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "naive CUDA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.9216893005371094,
+   "min_ms": 0.9168691253662109,
+   "max_ms": 0.9229106903076172,
+   "rounds_ms": [
+    0.9168691253662109,
+    0.9174626922607422,
+    0.9216893005371094,
+    0.9220301055908203,
+    0.9229106903076172
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "optimized CUDA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.6424384307861328,
+   "min_ms": 0.636835823059082,
+   "max_ms": 0.642682876586914,
+   "rounds_ms": [
+    0.636835823059082,
+    0.6422630310058594,
+    0.6424384307861328,
+    0.6426419067382813,
+    0.642682876586914
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "Triton tiled",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.31640575408935545,
+   "min_ms": 0.3158515167236328,
+   "max_ms": 0.3173273658752441,
+   "rounds_ms": [
+    0.3158515167236328,
+    0.3163443183898926,
+    0.3165900802612305,
+    0.31640575408935545,
+    0.3173273658752441
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "Triton fused",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.143308801651001,
+   "min_ms": 0.14156800270080566,
+   "max_ms": 0.14466048240661622,
+   "rounds_ms": [
+    0.143308801651001,
+    0.1435852813720703,
+    0.14466048240661622,
+    0.1416476821899414,
+    0.14156800270080566
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "PyTorch SDPA",
+   "group": "fp32",
+   "mode": "eager",
+   "median_ms": 0.1803865623474121,
+   "min_ms": 0.17950368881225587,
+   "max_ms": 0.18167808532714844,
+   "rounds_ms": [
+    0.17950368881225587,
+    0.18041568756103515,
+    0.1803865623474121,
+    0.1803264045715332,
+    0.18167808532714844
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "Triton fused FP16",
+   "group": "fp16",
+   "mode": "eager",
+   "median_ms": 0.03914943933486938,
+   "min_ms": 0.03195904016494751,
+   "max_ms": 0.059810881614685056,
+   "rounds_ms": [
+    0.03914943933486938,
+    0.059810881614685056,
+    0.03195904016494751,
+    0.03999743938446045,
+    0.032706561088562014
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "PyTorch SDPA FP16",
+   "group": "fp16",
+   "mode": "eager",
+   "median_ms": 0.05612544059753418,
+   "min_ms": 0.05563072204589844,
+   "max_ms": 0.061040639877319336,
+   "rounds_ms": [
+    0.05563072204589844,
+    0.05612544059753418,
+    0.061040639877319336,
+    0.06080512046813965,
+    0.055896639823913574
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "naive CUDA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.9192534637451172,
+   "min_ms": 0.9186883544921876,
+   "max_ms": 0.9196543884277344,
+   "rounds_ms": [
+    0.9186883544921876,
+    0.9192038726806641,
+    0.9193472290039062,
+    0.9196543884277344,
+    0.9192534637451172
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "optimized CUDA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.6422322845458984,
+   "min_ms": 0.6396006393432617,
+   "max_ms": 0.6426316833496094,
+   "rounds_ms": [
+    0.6396006393432617,
+    0.6422322845458984,
+    0.6418329620361328,
+    0.6422630310058594,
+    0.6426316833496094
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "Triton tiled",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.3142144012451172,
+   "min_ms": 0.31308799743652344,
+   "max_ms": 0.31467519760131835,
+   "rounds_ms": [
+    0.31308799743652344,
+    0.3138969612121582,
+    0.31467519760131835,
+    0.31436800003051757,
+    0.3142144012451172
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "Triton fused",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.14223360061645507,
+   "min_ms": 0.1406531238555908,
+   "max_ms": 0.14393343925476074,
+   "rounds_ms": [
+    0.14393343925476074,
+    0.14262271881103517,
+    0.14223360061645507,
+    0.14133248329162598,
+    0.1406531238555908
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "PyTorch SDPA",
+   "group": "fp32",
+   "mode": "graph",
+   "median_ms": 0.17679359436035155,
+   "min_ms": 0.17651391983032227,
+   "max_ms": 0.17691648483276368,
+   "rounds_ms": [
+    0.17651391983032227,
+    0.1768739128112793,
+    0.17679359436035155,
+    0.17691648483276368,
+    0.17662975311279297
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "Triton fused FP16",
+   "group": "fp16",
+   "mode": "graph",
+   "median_ms": 0.025610239505767823,
+   "min_ms": 0.024849600791931152,
+   "max_ms": 0.026050560474395752,
+   "rounds_ms": [
+    0.02516671895980835,
+    0.025801920890808107,
+    0.024849600791931152,
+    0.026050560474395752,
+    0.025610239505767823
+   ]
+  },
+  {
+   "seq_len": 1024,
+   "version": "PyTorch SDPA FP16",
+   "group": "fp16",
+   "mode": "graph",
+   "median_ms": 0.05301248073577881,
+   "min_ms": 0.05270527839660644,
+   "max_ms": 0.053267202377319335,
+   "rounds_ms": [
+    0.05270527839660644,
+    0.053040962219238284,
+    0.053267202377319335,
+    0.05301248073577881,
+    0.052939839363098144
+   ]
+  }
+ ],
+ "errors": [
+  {
+   "seq_len": 128,
+   "version": "naive CUDA",
+   "max_abs_err": 2.2351741790771484e-07
+  },
+  {
+   "seq_len": 128,
+   "version": "optimized CUDA",
+   "max_abs_err": 2.2351741790771484e-07
+  },
+  {
+   "seq_len": 128,
+   "version": "Triton tiled",
+   "max_abs_err": 2.980232238769531e-07
+  },
+  {
+   "seq_len": 128,
+   "version": "Triton fused",
+   "max_abs_err": 2.384185791015625e-07
+  },
+  {
+   "seq_len": 128,
+   "version": "PyTorch SDPA",
+   "max_abs_err": 0.0
+  },
+  {
+   "seq_len": 128,
+   "version": "Triton fused FP16",
+   "max_abs_err": 0.00037789344787597656
+  },
+  {
+   "seq_len": 128,
+   "version": "PyTorch SDPA FP16",
+   "max_abs_err": 0.00037789344787597656
+  },
+  {
+   "seq_len": 256,
+   "version": "naive CUDA",
+   "max_abs_err": 2.2351741790771484e-07
+  },
+  {
+   "seq_len": 256,
+   "version": "optimized CUDA",
+   "max_abs_err": 2.2351741790771484e-07
+  },
+  {
+   "seq_len": 256,
+   "version": "Triton tiled",
+   "max_abs_err": 2.086162567138672e-07
+  },
+  {
+   "seq_len": 256,
+   "version": "Triton fused",
+   "max_abs_err": 2.086162567138672e-07
+  },
+  {
+   "seq_len": 256,
+   "version": "PyTorch SDPA",
+   "max_abs_err": 0.0
+  },
+  {
+   "seq_len": 256,
+   "version": "Triton fused FP16",
+   "max_abs_err": 0.0003567934036254883
+  },
+  {
+   "seq_len": 256,
+   "version": "PyTorch SDPA FP16",
+   "max_abs_err": 0.0003567934036254883
+  },
+  {
+   "seq_len": 512,
+   "version": "naive CUDA",
+   "max_abs_err": 1.5273690223693848e-07
+  },
+  {
+   "seq_len": 512,
+   "version": "optimized CUDA",
+   "max_abs_err": 1.5273690223693848e-07
+  },
+  {
+   "seq_len": 512,
+   "version": "Triton tiled",
+   "max_abs_err": 2.086162567138672e-07
+  },
+  {
+   "seq_len": 512,
+   "version": "Triton fused",
+   "max_abs_err": 1.7881393432617188e-07
+  },
+  {
+   "seq_len": 512,
+   "version": "PyTorch SDPA",
+   "max_abs_err": 0.0
+  },
+  {
+   "seq_len": 512,
+   "version": "Triton fused FP16",
+   "max_abs_err": 0.000414431095123291
+  },
+  {
+   "seq_len": 512,
+   "version": "PyTorch SDPA FP16",
+   "max_abs_err": 0.000414431095123291
+  },
+  {
+   "seq_len": 1024,
+   "version": "naive CUDA",
+   "max_abs_err": 1.9371509552001953e-07
+  },
+  {
+   "seq_len": 1024,
+   "version": "optimized CUDA",
+   "max_abs_err": 1.9371509552001953e-07
+  },
+  {
+   "seq_len": 1024,
+   "version": "Triton tiled",
+   "max_abs_err": 1.7881393432617188e-07
+  },
+  {
+   "seq_len": 1024,
+   "version": "Triton fused",
+   "max_abs_err": 1.7881393432617188e-07
+  },
+  {
+   "seq_len": 1024,
+   "version": "PyTorch SDPA",
+   "max_abs_err": 0.0
+  },
+  {
+   "seq_len": 1024,
+   "version": "Triton fused FP16",
+   "max_abs_err": 0.0003593564033508301
+  },
+  {
+   "seq_len": 1024,
+   "version": "PyTorch SDPA FP16",
+   "max_abs_err": 0.0003593564033508301
+  }
+ ],
+ "stages": [
+  {
+   "seq_len": 128,
+   "stage": "1. Q@K^T + mask",
+   "version": "naive CUDA",
+   "mode": "eager",
+   "median_ms": 0.017008639574050903
+  },
+  {
+   "seq_len": 128,
+   "stage": "1. Q@K^T + mask",
+   "version": "optimized CUDA",
+   "mode": "eager",
+   "median_ms": 0.009308159947395325
+  },
+  {
+   "seq_len": 128,
+   "stage": "2. softmax",
+   "version": "CUDA (both)",
+   "mode": "eager",
+   "median_ms": 0.0170905601978302
+  },
+  {
+   "seq_len": 128,
+   "stage": "3. P@V",
+   "version": "CUDA (both)",
+   "mode": "eager",
+   "median_ms": 0.009277439713478088
+  },
+  {
+   "seq_len": 128,
+   "stage": "1. Q@K^T + mask",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.02254879951477051
+  },
+  {
+   "seq_len": 128,
+   "stage": "2. softmax",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.014950079917907715
+  },
+  {
+   "seq_len": 128,
+   "stage": "3. P@V",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.019519360065460206
+  },
+  {
+   "seq_len": 128,
+   "stage": "1. Q@K^T + mask",
+   "version": "naive CUDA",
+   "mode": "graph",
+   "median_ms": 0.01687551975250244
+  },
+  {
+   "seq_len": 128,
+   "stage": "1. Q@K^T + mask",
+   "version": "optimized CUDA",
+   "mode": "graph",
+   "median_ms": 0.009135680198669434
+  },
+  {
+   "seq_len": 128,
+   "stage": "2. softmax",
+   "version": "CUDA (both)",
+   "mode": "graph",
+   "median_ms": 0.015183039903640748
+  },
+  {
+   "seq_len": 128,
+   "stage": "3. P@V",
+   "version": "CUDA (both)",
+   "mode": "graph",
+   "median_ms": 0.008212479948997497
+  },
+  {
+   "seq_len": 128,
+   "stage": "1. Q@K^T + mask",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.008979200124740601
+  },
+  {
+   "seq_len": 128,
+   "stage": "2. softmax",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.008773760199546813
+  },
+  {
+   "seq_len": 128,
+   "stage": "3. P@V",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.008567360043525696
+  },
+  {
+   "seq_len": 256,
+   "stage": "1. Q@K^T + mask",
+   "version": "naive CUDA",
+   "mode": "eager",
+   "median_ms": 0.039912641048431396
+  },
+  {
+   "seq_len": 256,
+   "stage": "1. Q@K^T + mask",
+   "version": "optimized CUDA",
+   "mode": "eager",
+   "median_ms": 0.016189440488815307
+  },
+  {
+   "seq_len": 256,
+   "stage": "2. softmax",
+   "version": "CUDA (both)",
+   "mode": "eager",
+   "median_ms": 0.029428799152374268
+  },
+  {
+   "seq_len": 256,
+   "stage": "3. P@V",
+   "version": "CUDA (both)",
+   "mode": "eager",
+   "median_ms": 0.01376255989074707
+  },
+  {
+   "seq_len": 256,
+   "stage": "1. Q@K^T + mask",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.018337600231170655
+  },
+  {
+   "seq_len": 256,
+   "stage": "2. softmax",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.01457152009010315
+  },
+  {
+   "seq_len": 256,
+   "stage": "3. P@V",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.01866752028465271
+  },
+  {
+   "seq_len": 256,
+   "stage": "1. Q@K^T + mask",
+   "version": "naive CUDA",
+   "mode": "graph",
+   "median_ms": 0.039966719150543215
+  },
+  {
+   "seq_len": 256,
+   "stage": "1. Q@K^T + mask",
+   "version": "optimized CUDA",
+   "mode": "graph",
+   "median_ms": 0.015954240560531616
+  },
+  {
+   "seq_len": 256,
+   "stage": "2. softmax",
+   "version": "CUDA (both)",
+   "mode": "graph",
+   "median_ms": 0.02916224002838135
+  },
+  {
+   "seq_len": 256,
+   "stage": "3. P@V",
+   "version": "CUDA (both)",
+   "mode": "graph",
+   "median_ms": 0.013557759523391723
+  },
+  {
+   "seq_len": 256,
+   "stage": "1. Q@K^T + mask",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.016209280490875243
+  },
+  {
+   "seq_len": 256,
+   "stage": "2. softmax",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.008036479949951172
+  },
+  {
+   "seq_len": 256,
+   "stage": "3. P@V",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.009203839898109436
+  },
+  {
+   "seq_len": 512,
+   "stage": "1. Q@K^T + mask",
+   "version": "naive CUDA",
+   "mode": "eager",
+   "median_ms": 0.13019136428833009
+  },
+  {
+   "seq_len": 512,
+   "stage": "1. Q@K^T + mask",
+   "version": "optimized CUDA",
+   "mode": "eager",
+   "median_ms": 0.05594912052154541
+  },
+  {
+   "seq_len": 512,
+   "stage": "2. softmax",
+   "version": "CUDA (both)",
+   "mode": "eager",
+   "median_ms": 0.08252351760864257
+  },
+  {
+   "seq_len": 512,
+   "stage": "3. P@V",
+   "version": "CUDA (both)",
+   "mode": "eager",
+   "median_ms": 0.04228032112121582
+  },
+  {
+   "seq_len": 512,
+   "stage": "1. Q@K^T + mask",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.05190656185150146
+  },
+  {
+   "seq_len": 512,
+   "stage": "2. softmax",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.015831040143966676
+  },
+  {
+   "seq_len": 512,
+   "stage": "3. P@V",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.01879040002822876
+  },
+  {
+   "seq_len": 512,
+   "stage": "1. Q@K^T + mask",
+   "version": "naive CUDA",
+   "mode": "graph",
+   "median_ms": 0.12995391845703125
+  },
+  {
+   "seq_len": 512,
+   "stage": "1. Q@K^T + mask",
+   "version": "optimized CUDA",
+   "mode": "graph",
+   "median_ms": 0.05562079906463623
+  },
+  {
+   "seq_len": 512,
+   "stage": "2. softmax",
+   "version": "CUDA (both)",
+   "mode": "graph",
+   "median_ms": 0.08257535934448242
+  },
+  {
+   "seq_len": 512,
+   "stage": "3. P@V",
+   "version": "CUDA (both)",
+   "mode": "graph",
+   "median_ms": 0.04176896095275879
+  },
+  {
+   "seq_len": 512,
+   "stage": "1. Q@K^T + mask",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.051374077796936035
+  },
+  {
+   "seq_len": 512,
+   "stage": "2. softmax",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.007965760231018066
+  },
+  {
+   "seq_len": 512,
+   "stage": "3. P@V",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.01755136013031006
+  },
+  {
+   "seq_len": 1024,
+   "stage": "1. Q@K^T + mask",
+   "version": "naive CUDA",
+   "mode": "eager",
+   "median_ms": 0.5051055908203125
+  },
+  {
+   "seq_len": 1024,
+   "stage": "1. Q@K^T + mask",
+   "version": "optimized CUDA",
+   "mode": "eager",
+   "median_ms": 0.22002592086791992
+  },
+  {
+   "seq_len": 1024,
+   "stage": "2. softmax",
+   "version": "CUDA (both)",
+   "mode": "eager",
+   "median_ms": 0.2860723114013672
+  },
+  {
+   "seq_len": 1024,
+   "stage": "3. P@V",
+   "version": "CUDA (both)",
+   "mode": "eager",
+   "median_ms": 0.14338047981262206
+  },
+  {
+   "seq_len": 1024,
+   "stage": "1. Q@K^T + mask",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.20416383743286132
+  },
+  {
+   "seq_len": 1024,
+   "stage": "2. softmax",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.055558719635009766
+  },
+  {
+   "seq_len": 1024,
+   "stage": "3. P@V",
+   "version": "Triton tiled",
+   "mode": "eager",
+   "median_ms": 0.060743680000305174
+  },
+  {
+   "seq_len": 1024,
+   "stage": "1. Q@K^T + mask",
+   "version": "naive CUDA",
+   "mode": "graph",
+   "median_ms": 0.5048320007324218
+  },
+  {
+   "seq_len": 1024,
+   "stage": "1. Q@K^T + mask",
+   "version": "optimized CUDA",
+   "mode": "graph",
+   "median_ms": 0.22008512496948243
+  },
+  {
+   "seq_len": 1024,
+   "stage": "2. softmax",
+   "version": "CUDA (both)",
+   "mode": "graph",
+   "median_ms": 0.2852441596984863
+  },
+  {
+   "seq_len": 1024,
+   "stage": "3. P@V",
+   "version": "CUDA (both)",
+   "mode": "graph",
+   "median_ms": 0.14222335815429688
+  },
+  {
+   "seq_len": 1024,
+   "stage": "1. Q@K^T + mask",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.20171775817871093
+  },
+  {
+   "seq_len": 1024,
+   "stage": "2. softmax",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.054616961479187015
+  },
+  {
+   "seq_len": 1024,
+   "stage": "3. P@V",
+   "version": "Triton tiled",
+   "mode": "graph",
+   "median_ms": 0.05971968173980713
+  }
+ ],
+ "lines_of_code": {
+  "naive CUDA": 69,
+  "optimized CUDA": 91,
+  "Triton tiled": 50,
+  "Triton fused": 36
+ }
+}
