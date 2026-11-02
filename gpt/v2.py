@@ -1,4 +1,4 @@
-from altair import value
+import os
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
@@ -21,7 +21,8 @@ dropout=0.2
 torch.manual_seed(1337)
 
 # wget https://raw.githubusercontent.com/karpathy/ng-video-lecture/master/input.txt
-with open('input.txt' , 'r',  encoding='utf-8') as f:
+_HERE = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(_HERE, 'input.txt'), 'r', encoding='utf-8') as f:
   text=f.read()
 
 

@@ -1,0 +1,62 @@
+# COMMANDS - Optimizing Transformer Self-Attention with CUDA
+# Repo: D:\College\SEM7\GPU\pROJECT\GPT  from Scratch
+
+# --- Prerequisite checks ---
+nvcc --version
+nvidia-smi
+py -3.13 --version
+cd "D:\College\SEM7\GPU\pROJECT\GPT  from Scratch"
+python integration\gpu_info.py
+
+# --- Core CUDA (PowerShell: first line loads the MSVC 'cl' compiler) ---
+& 'C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Launch-VsDevShell.ps1' -Arch amd64 -HostArch amd64
+cd "D:\College\SEM7\GPU\pROJECT\GPT  from Scratch\cuda_attention"
+cl /EHsc /O2 01_cpu_attention.cpp /Fe:cpu_attention.exe
+.\cpu_attention.exe
+nvcc -O3 -arch=sm_89 02_naive_cuda_attention.cu -o naive_attention.exe
+.\naive_attention.exe
+nvcc -O3 -arch=sm_89 03_optimized_attention.cu -o optimized_attention.exe
+.\optimized_attention.exe
+nvcc -O3 -arch=sm_89 benchmark.cu -o benchmark.exe
+.\benchmark.exe
+nvcc -O3 -arch=sm_89 test_cuda.cu -o test_cuda.exe
+.\test_cuda.exe
+
+# --- Triton: create environment ---
+cd "D:\College\SEM7\GPU\pROJECT\GPT  from Scratch"
+py -3.13 -m venv .venv-triton
+.\.venv-triton\Scripts\python.exe -m pip install --upgrade pip
+.\.venv-triton\Scripts\python.exe -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cu130
+.\.venv-triton\Scripts\python.exe -m pip uninstall -y triton
+.\.venv-triton\Scripts\python.exe -m pip install "triton-windows>=3.8,<3.9" ninja numpy setuptools
+
+# --- Triton: run ---
+cd "D:\College\SEM7\GPU\pROJECT\GPT  from Scratch"
+.\.venv-triton\Scripts\python.exe triton_attention\00_vector_add.py
+.\.venv-triton\Scripts\python.exe triton_attention\check_correctness.py
+.\.venv-triton\Scripts\python.exe triton_attention\benchmark_triton.py
+.\.venv-triton\Scripts\python.exe triton_attention\benchmark_triton.py --skip-cuda
+
+# --- GPT integration ---
+cd "D:\College\SEM7\GPU\pROJECT\GPT  from Scratch"
+.\.venv-triton\Scripts\python.exe integration\run_integration.py
+.\.venv-triton\Scripts\python.exe integration\run_integration.py --skip-cuda
+.\.venv-triton\Scripts\python.exe integration\run_integration.py --max-iters 2000 --n-embd 384 --n-head 6 --n-layer 6
+.\.venv-triton\Scripts\python.exe integration\gpu_info.py
+
+# --- UI ---
+cd "D:\College\SEM7\GPU\pROJECT\GPT  from Scratch"
+.\.venv-triton\Scripts\python.exe -m pip install -r ui\requirements.txt
+.\.venv-triton\Scripts\python.exe -m streamlit run ui\app.py
+
+# --- GPT from scratch (separate env) ---
+cd "D:\College\SEM7\GPU\pROJECT\GPT  from Scratch"
+py -3.13 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe gpt\v2.py
+.\.venv\Scripts\python.exe gpt\bigram.py
+
+# --- Git ---
+git clone https://github.com/Kinks106/Optimization-of-transformers-using-CUDA.git
+git checkout feature/triton-attention

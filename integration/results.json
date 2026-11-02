@@ -1,0 +1,64 @@
+{
+  "gpu_info": {
+    "available": true,
+    "source": "torch",
+    "torch_version": "2.14.1+cu130",
+    "cuda_available": true,
+    "cuda_version": "13.0",
+    "nvcc_version": "13.3.73",
+    "gpus": [
+      {
+        "index": 0,
+        "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "compute_capability": "sm_89",
+        "total_memory_gb": 8.0,
+        "multi_processor_count": 24,
+        "l2_cache_mb": 32.0,
+        "max_threads_per_sm": 1536,
+        "driver_version": "610.47",
+        "temperature_c": "66",
+        "utilization_pct": "0",
+        "memory_used_mb": "0",
+        "memory_free_mb": "7956",
+        "power_draw_w": "4.08",
+        "power_limit_w": "[N/A]"
+      }
+    ],
+    "nvidia_smi": [
+      {
+        "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+        "driver_version": "610.47",
+        "memory.total": "8188",
+        "memory.used": "0",
+        "memory.free": "7956",
+        "compute_cap": "8.9",
+        "temperature.gpu": "66",
+        "utilization.gpu": "0",
+        "power.draw": "4.08",
+        "power.limit": "[N/A]"
+      }
+    ]
+  },
+  "config": {
+    "vocab_size": 65,
+    "block_size": 64,
+    "n_embd": 128,
+    "n_head": 4,
+    "n_layer": 4,
+    "dropout": 0.1
+  },
+  "params_millions": 0.817,
+  "final_loss": {
+    "train": 2.295562267303467,
+    "val": 2.2931275367736816
+  },
+  "backend_used_for_generation": "cuda",
+  "cuda_backend_available": true,
+  "cuda_backend_error": null,
+  "max_abs_error_vs_pytorch": 1.1026859283447266e-06,
+  "forward_ms": {
+    "pytorch": 8.4293,
+    "cuda": 16.0595
+  },
+  "sample_text": "\nGBLENRIS:\nSikedel youst; some, JI weabeep Hamand nee the bfe to d,\nWigrowre heperdhe, were is her culs thes.\n\nSurt Tar ARINRKICEN the apray, INGRou sad thorthy upaver le me.\n\n\nKG meeer, mod vave OLICIPWatt you areare ange, aveour won.\n\nTack ty Ery, mik rik feshelengiK:\nHey'st thet:\nShe hiqulm cks s "
+}

@@ -42,3 +42,18 @@ desktop.ini
 # Environment variables
 .env
 .env.local
+
+# Compiled CUDA / C++ build artifacts (rebuilt from source; never commit)
+*.exe
+*.obj
+*.o
+*.lib
+*.exp
+*.pdb
+*.pyd
+*.dll
+
+# PyTorch C++/CUDA extension build output
+build/
+torch_extensions/
+*.so

@@ -180,30 +180,24 @@ cuda_attention/benchmark.cu
 ```text
 GPT-from-scratch/
 │
-├── bigram.py
-├── demo.py
-├── gpt_dev.ipynb
-├── input.txt
+├── README.md
 ├── requirements.txt
-├── v2.py
 │
-├── cuda_attention/
-│   │
-│   ├── 01_cpu_attention.cpp
-│   │   └── Sequential CPU implementation
-│   │
-│   ├── 02_naive_cuda_attention.cu
-│   │   └── Basic CUDA implementation
-│   │
-│   ├── 03_optimized_attention.cu
-│   │   └── Shared memory optimized attention
-│   │
-│   ├── benchmark.cu
-│   │   └── CPU vs CUDA performance benchmark
-│   │
-│   └── CMakeLists.txt
+├── gpt/                           The "GPT from scratch" PyTorch model (Karpathy-style)
+│   ├── v2.py                      Full multi-head transformer GPT (train + generate)
+│   ├── bigram.py                  Simple bigram baseline
+│   ├── demo.py                    Quick CUDA/torch availability check
+│   ├── gpt_dev.ipynb              Development notebook
+│   └── input.txt                  Training text (tiny Shakespeare)
 │
-├── triton_attention/              (Content Beyond Syllabus: Triton)
+├── cuda_attention/                Core project: self-attention in C++ / CUDA
+│   ├── 01_cpu_attention.cpp       Sequential CPU implementation
+│   ├── 02_naive_cuda_attention.cu Basic CUDA implementation
+│   ├── 03_optimized_attention.cu  Shared-memory tiled attention
+│   ├── benchmark.cu               CPU vs naive vs optimized CUDA benchmark
+│   └── test_cuda.cu               CUDA sanity test
+│
+├── triton_attention/              Content Beyond Syllabus: Triton
 │   ├── SETUP.md                   Windows setup + troubleshooting
 │   ├── 00_vector_add.py           Triton smoke test
 │   ├── 01_triton_tiled_qkt.py     Triton port of our 3-kernel CUDA algorithm
@@ -213,7 +207,21 @@ GPT-from-scratch/
 │   ├── cuda_ext/                  Our CUDA kernels as a PyTorch extension
 │   └── results/                   Generated tables (.md) and raw timings (.json)
 │
-└── README.md
+├── integration/                   GPT integration: GPT running on our CUDA attention
+│   ├── model.py                   Import-safe GPT with a switchable attention backend
+│   ├── cuda_attention_backend.py  Loads cuda_ext and wraps it for the GPT
+│   ├── run_integration.py         Train in PyTorch, generate with CUDA attention
+│   └── gpu_info.py                Reports the GPU this project runs on
+│
+├── ui/                            Streamlit UI to showcase results + GPU properties
+│   └── app.py
+│
+├── commands/                      All commands needed to run the project
+│   └── commands.txt
+│
+└── docs/                          Project report and presentation (Markdown)
+    ├── project_report.md
+    └── presentation.md
 ```
 
 ---

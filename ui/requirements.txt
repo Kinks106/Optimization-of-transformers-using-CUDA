@@ -1,0 +1,7 @@
+# Streamlit showcase UI (ui/app.py)
+# GPU properties come from nvidia-smi (no torch needed); richer info if torch is present.
+streamlit>=1.30
+pandas>=2.0
+# setuptools is needed if you launch the UI's "Run integration" with the CUDA backend
+# (torch.utils.cpp_extension requires it to build the kernels).
+setuptools
